@@ -51,9 +51,15 @@ if [[ `go list -f {{.Incomplete}}` == "true" || ! -z "$IMPORT_URL" ]]; then
 
         echo "Building"
 
-        go install $INSTALL_URL
+	echo "---> Installing revel..."
+	go get github.com/golang/dep/cmd/dep
+	go get github.com/revel/revel
+	go get github.com/revel/cmd/revel
 
-        mv $GOPATH/bin/* /opt/app-root/gobinary
+	echo "---> Building application source with revel..."
+	$GOBIN/revel build main/ $GOBIN/build prod
+
+	mv $GOPATH/bin/* /opt/app-root/gobinary
 
         popd
 
